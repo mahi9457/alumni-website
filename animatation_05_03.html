@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ITS Alumni Portal</title>
+<style>
+:root {
+    --primary:#80251f;
+    --secondary:#f0c072;
+    --text:#333;
+    --bg:#fff;
+    --dark-bg:#1a1a1a;
+    --dark-text:#f0f0f0;
+}
+body {margin:0; font-family:Arial,sans-serif; scroll-behavior:smooth; background:var(--bg); color:var(--text);}
+a {text-decoration:none; color:inherit;}
+h1,h2,h3{margin:0;}
+/* Navbar */
+nav {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    padding: 10px 0;
+    text-align:center;
+    position: sticky;
+    top:0;
+    z-index:100;
+    border-bottom:1px solid rgba(255,255,255,0.25);
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+}
+nav a {margin:0 15px; font-weight:bold; font-size:18px; padding:5px 10px; transition:0.3s;}
+nav a.active, nav a:hover {color:var(--secondary); text-decoration:underline;}
+#darkToggle{cursor:pointer; background:none; border:none; font-size:18px; margin-left:10px;}
+/* Hero */
+#home {position:relative; height:90vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; overflow:hidden; color:white;}
+#home .bg{position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://www.its.edu.in/img/clgimg.jpeg') no-repeat center/cover; z-index:1;}
+#home img{width:180px; z-index:2; margin-bottom:20px; animation:logoBounce 2s infinite alternate;}
+#home h1{font-size:3.5rem; z-index:2; position:relative;}
+#typing{font-size:2rem; color:#f0c072; z-index:2; margin-top:10px;}
+#scrollDown{position:absolute; bottom:20px; font-size:2rem; z-index:2; cursor:pointer; animation:bounce 1.5s infinite alternate;}
+
+/* Sections */
+.section {padding:60px 20px; max-width:1000px; margin:40px auto; background:var(--bg); border-radius:14px; color:var(--text); box-shadow:0 4px 10px rgba(0,0,0,0.1); border:2px solid var(--primary);}
+.section h2{color:var(--primary); margin-bottom:20px;}
+.grid{display:flex; flex-wrap:wrap; justify-content:center; gap:20px;}
+.card{background:rgba(255,255,255,0.9); color:var(--text); padding:20px; border-radius:14px; box-shadow:0 4px 8px rgba(0,0,0,0.2); transition: transform 0.3s, box-shadow 0.3s; border:2px solid var(--primary);}
+.card:hover{transform:translateY(-8px) scale(1.02); box-shadow:0 8px 20px rgba(0,0,0,0.3);}
+.grid .card{width:300px;}
+table{width:100%; border-collapse: collapse; margin-top:10px; border:2px solid var(--primary);}
+th,td{border:1px solid var(--primary); padding:10px; text-align:left;}
+th{background:var(--primary); color:white;}
+table tr:hover{background-color:#f5f5f5;}
+input, select, button{border:2px solid var(--primary); border-radius:8px; padding:8px;}
+button{background:var(--primary); color:white; cursor:pointer;}
+button:hover{transform:scale(1.05);}
+input:focus, select:focus{outline:none; border-color:var(--secondary);}
+.modal-content input, .modal-content select, .modal-content button{width:100%; margin-bottom:10px;}
+
+/* Footer */
+footer{text-align:center; padding:15px; background: rgba(255,255,255,0.15); backdrop-filter:blur(12px); color:var(--primary); border-top:2px solid var(--primary); margin-top:40px;}
+
+/* Back to Top */
+#topBtn{position:fixed; bottom:20px; right:20px; display:none; padding:10px 15px; background:var(--primary); color:white; border:none; cursor:pointer; border-radius:50%; font-weight:bold; transition:transform 0.2s;}
+#topBtn:hover{transform:scale(1.2);}
+
+/* Modals */
+.modal{display:none; position:fixed; z-index:200; left:0; top:0; width:100%; height:100%; overflow:auto; background-color: rgba(0,0,0,0.5);}
+.modal-content{background-color:var(--bg); margin:10% auto; padding:20px; border-radius:14px; width:90%; max-width:500px; position:relative;}
+.close{position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer;}
+
+/* Animations */
+@keyframes logoBounce{0%{transform:translateY(0);}100%{transform:translateY(-15px);}}
+@keyframes fadeIn{0%{opacity:0; transform:translateY(20px);}100%{opacity:1; transform:translateY(0);}}
+@keyframes bounce{0%{transform:translateY(0);}100%{transform:translateY(-10px);}}
+
+/* Responsive */
+@media(max-width:768px){nav a{display:block; margin:10px 0;} .grid{flex-direction:column; align-items:center;} #home h1{font-size:2.5rem;} #typing{font-size:1.5rem;}}
+
+/* Dark Mode */
+body.dark-mode{background:var(--dark-bg); color:var(--dark-text);}
+body.dark-mode .card, body.dark-mode .section{background:rgba(50,50,50,0.9); color:var(--dark-text); border:2px solid var(--secondary);}
+body.dark-mode table th{background:var(--secondary); color:var(--dark-bg);}
+body.dark-mode table, body.dark-mode table td, body.dark-mode table th{border-color:var(--secondary);}
+body.dark-mode footer{color:var(--dark-text); border-top:2px solid var(--secondary);}
+body.dark-mode input, body.dark-mode select, body.dark-mode button{border-color:var(--secondary);}
+body.dark-mode button{background:var(--secondary); color:var(--dark-bg);}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+<a href="#home" class="nav-link">Home</a>
+<a href="#directory" class="nav-link">Alumni Directory</a>
+<a href="#events" class="nav-link">Events</a>
+<a href="#jobs" class="nav-link">Jobs</a>
+<a href="#login" class="nav-link">Login/Register</a>
+<button id="darkToggle">🌓</button>
+</nav>
+
+<!-- Hero -->
+<div id="home">
+<div class="bg"></div>
+<img src="https://upload.wikimedia.org/wikipedia/en/thumb/8/82/ITS_Logo.svg/1200px-ITS_Logo.svg.png" alt="ITS Logo">
+<h1>Welcome to I.T.S...</h1>
+<div id="typing"></div>
+<div id="scrollDown">&#8595;</div>
+</div>
+
+<!-- Alumni Directory -->
+<div class="section" id="directory">
+<h2>Alumni Directory</h2>
+<div class="card">
+<input type="text" id="searchInput" placeholder="Search alumni by name...">
+<select id="batchFilter">
+<option value="">All Batches</option>
+<option value="2018">2018</option>
+<option value="2019">2019</option>
+<option value="2020">2020</option>
+</select>
+<table id="alumniTable">
+<tr><th>Name</th><th>Batch</th><th>Department</th><th>Email</th></tr>
+<tr><td>Rohan Sharma</td><td>2018</td><td>Computer Science</td><td>rohan@example.com</td></tr>
+<tr><td>Priya Singh</td><td>2019</td><td>Mechanical</td><td>priya@example.com</td></tr>
+<tr><td>Akash Verma</td><td>2020</td><td>Electronics</td><td>akash@example.com</td></tr>
+</table>
+</div>
+</div>
+
+<!-- Events -->
+<div class="section" id="events">
+<h2>Upcoming Events</h2>
+<div class="grid">
+<div class="card">
+<h3>Alumni Reunion 2025</h3>
+<p><strong>Date:</strong> 20th Dec 2025</p>
+<p><strong>Countdown:</strong> <span id="eventCountdown"></span></p>
+<p><strong>Venue:</strong> ITS Auditorium</p>
+</div>
+<div class="card">
+<h3>Guest Lecture by Alumni</h3>
+<p><strong>Date:</strong> 5th Jan 2026</p>
+<p><strong>Countdown:</strong> <span id="eventCountdown2"></span></p>
+<p><strong>Venue:</strong> Lecture Hall 2</p>
+</div>
+</div>
+</div>
+
+<!-- Jobs -->
+<div class="section" id="jobs">
+<h2>Job & Internship Posts</h2>
+<div class="grid">
+<div class="card jobCard">
+<h3>Software Engineer Intern</h3>
+<p><strong>Company:</strong> Infosys</p>
+<p><strong>Posted By:</strong> Rohan Sharma</p>
+</div>
+<div class="card jobCard">
+<h3>Mechanical Design Trainee</h3>
+<p><strong>Company:</strong> L&T</p>
+<p><strong>Posted By:</strong> Priya Singh</p>
+</div>
+</div>
+</div>
+
+<!-- Login/Register -->
+<div class="section" id="login">
+<h2>Login/Register</h2>
+<div class="grid">
+<div class="card" id="loginBtn" style="cursor:pointer;"><h3>Login</h3><p>Click to open login form</p></div>
+<div class="card" id="registerBtn" style="cursor:pointer;"><h3>Register</h3><p>Click to open registration form</p></div>
+</div>
+</div>
+
+<!-- Footer -->
+<footer>
+Made with ♥ by ITS<br>
+ITS <span id="year"></span> • Mohan Nagar, Ghaziabad
+</footer>
+
+<!-- Back to Top -->
+<button id="topBtn">↑</button>
+
+<!-- Modals -->
+<div class="modal" id="loginModal">
+<div class="modal-content">
+<span class="close" id="loginClose">&times;</span>
+<h2>Login</h2>
+<form id="loginForm">
+<label>Email</label>
+<input type="email">
+<label>Password</label>
+<input type="password">
+<button type="submit">Login</button>
+</form>
+</div>
+</div>
+
+<div class="modal" id="registerModal">
+<div class="modal-content">
+<span class="close" id="registerClose">&times;</span>
+<h2>Register</h2>
+<form id="registerForm">
+<label>Name</label>
+<input type="text">
+<label>Email</label>
+<input type="email">
+<label>Password</label>
+<input type="password">
+<button type="submit">Register</button>
+</form>
+</div>
+</div>
+
+<script>
+// Year
+document.getElementById('year').textContent=new Date().getFullYear();
+// Back to Top
+const topBtn=document.getElementById('topBtn');
+window.onscroll=function(){topBtn.style.display=window.scrollY>100?'block':'none';};
+topBtn.addEventListener('click',()=>window.scrollTo({top:0, behavior:'smooth'}));
+// Typing
+const typeText=["Institute of Technology","and Science","ITS Alumni Portal"];
+let typeIndex=0,charIndex=0;
+const typingElem=document.getElementById('typing');
+function type(){ 
+    if(typeIndex<typeText.length){
+        if(charIndex<typeText[typeIndex].length){ 
+            typingElem.textContent+=typeText[typeIndex][charIndex++]; 
+            setTimeout(type,100);
+        }else{ setTimeout(()=>{ typingElem.textContent=''; charIndex=0; typeIndex=(typeIndex+1)%typeText.length; type(); },2000); 
+        } 
+    } 
+}
+type();
+// Scroll Highlight
+const navLinks=document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', ()=>{
+    const scrollPos = window.scrollY+80;
+    navLinks.forEach(link=>{
+        const section=document.querySelector(link.getAttribute('href'));
+        if(section.offsetTop<=scrollPos && section.offsetTop+section.offsetHeight>scrollPos){
+            navLinks.forEach(l=>l.classList.remove('active'));
+            link.classList.add('active');
+        }
+    });
+});
+// Countdown
+function countdown(target,elemId){
+    const targetDate=new Date(target).getTime();
+    setInterval(()=>{
+        const now=new Date().getTime();
+        const distance=targetDate-now;
+        if(distance<0) return document.getElementById(elemId).textContent="Event Started";
+        const days=Math.floor(distance/(1000*60*60*24));
+        const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+        const mins=Math.floor((distance%(1000*60*60))/(1000*60));
+        const secs=Math.floor((distance%(1000*60))/1000);
+        document.getElementById(elemId).textContent=`${days}d ${hours}h ${mins}m ${secs}s`;
+    },1000);
+}
+countdown("Dec 20, 2025 09:00:00","eventCountdown");
+countdown("Jan 5, 2026 10:00:00","eventCountdown2");
+// Modals
+const loginModal=document.getElementById('loginModal');
+const registerModal=document.getElementById('registerModal');
+document.getElementById('loginBtn').onclick=()=>loginModal.style.display='block';
+document.getElementById('registerBtn').onclick=()=>registerModal.style.display='block';
+document.getElementById('loginClose').onclick=()=>loginModal.style.display='none';
+document.getElementById('registerClose').onclick=()=>registerModal.style.display='none';
+window.onclick=function(event){
+    if(event.target==loginModal) loginModal.style.display='none';
+    if(event.target==registerModal) registerModal.style.display='none';
+};
+// Login/Register submit
+document.getElementById('loginForm').addEventListener('submit',function(e){ e.preventDefault(); alert('Login submitted'); loginModal.style.display='none'; });
+document.getElementById('registerForm').addEventListener('submit',function(e){ e.preventDefault(); alert('Registration submitted'); registerModal.style.display='none'; });
+// Dark Mode
+document.getElementById('darkToggle').addEventListener('click',()=>document.body.classList.toggle('dark-mode'));
+// Scroll Down
+document.getElementById('scrollDown').addEventListener('click',()=>window.scrollTo({top:document.getElementById('directory').offsetTop, behavior:'smooth'}));
+// Alumni Search
+const searchInput=document.getElementById('searchInput');
+const batchFilter=document.getElementById('batchFilter');
+const alumniTable=document.getElementById('alumniTable');
+function filterAlumni() {
+    const filterText=searchInput.value.toLowerCase();
+    const batch=batchFilter.value;
+    const rows=alumniTable.getElementsByTagName('tr');
+    for(let i=1;i<rows.length;i++){
+        const name=rows[i].getElementsByTagName('td')[0].textContent.toLowerCase();
+        const rowBatch=rows[i].getElementsByTagName('td')[1].textContent;
+        rows[i].style.display=(name.includes(filterText)&&(batch===''||batch===rowBatch))?'':'none';
+    }
+}
+searchInput.addEventListener('keyup',filterAlumni);
+batchFilter.addEventListener('change',filterAlumni);
+</script>
+
+</body>
+</html>
